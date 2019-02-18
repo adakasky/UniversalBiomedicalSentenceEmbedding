@@ -1,6 +1,6 @@
 from __future__ import print_function, division
 
-import util, word2vec
+from src import util, word2vec
 
 sents, anns = util.load_biosses()
 print("Data loaded.")

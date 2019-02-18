@@ -2,6 +2,7 @@ from __future__ import print_function, division
 
 import os
 import numpy as np
+
 from gensim.models import KeyedVectors
 
 d = "../data"

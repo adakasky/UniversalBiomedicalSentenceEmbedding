@@ -3,6 +3,7 @@ from __future__ import print_function, division
 import os
 import pandas
 import numpy as np
+
 from gensim.parsing.preprocessing import remove_stopwords, strip_non_alphanum
 from scipy.spatial.distance import cosine
 
