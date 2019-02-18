@@ -1,9 +1,11 @@
 from __future__ import print_function, division
 
+import os
 import numpy as np
 from gensim.models import KeyedVectors
 
-w2v = KeyedVectors.load_word2vec_format("../data/PubMed-w2v.bin", binary=True)
+d = "../data"
+w2v = KeyedVectors.load_word2vec_format(os.path.join(d, "wikipedia-pubmed-and-PMC-w2v.bin"), binary=True)
 print("word2vec parameters loaded.")
 
 

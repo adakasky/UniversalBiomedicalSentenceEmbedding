@@ -7,9 +7,9 @@ from gensim.parsing.preprocessing import remove_stopwords, strip_non_alphanum
 from scipy.spatial.distance import cosine
 
 
-def load_biosses(dir='../data'):
-    sent_file = os.path.join(dir, "BIOSSES_sents.tsv")
-    ann_file = os.path.join(dir, "BIOSSES_ann.tsv")
+def load_biosses(d='../data'):
+    sent_file = os.path.join(d, "BIOSSES_sents.tsv")
+    ann_file = os.path.join(d, "BIOSSES_ann.tsv")
     sents = np.array(pandas.read_csv(sent_file, sep='\t'))[:, 1:]
     anns = np.average(np.array(pandas.read_csv(ann_file, sep='\t'))[:, 1:], axis=1)
     
