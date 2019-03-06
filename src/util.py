@@ -1,6 +1,8 @@
 from __future__ import print_function, division
 
 import os
+import spacy
+import codecs
 import pandas
 import numpy as np
 
@@ -36,3 +38,25 @@ def compute_all_cos_sim(emb):
 
 def compute_pearson_coeff(a, b):
     return np.corrcoef(a, b)[0, 1]
+
+
+def convert_pubmed_to_ospl(file='../data/query_result.csv', out='../data/query_result_ospl.txt'):
+    with codecs.open(file, 'rb', 'utf-8') as r, codecs.open(out, 'wb', 'utf-8') as w:
+        nlp = spacy.load('en_core_web_sm')
+        reader = pandas.read_csv(r, escapechar='\\', chunksize=1)
+        
+        for line in reader:
+            title = line['title'].item()
+            abstract = line['abstract'].item()
+            
+            if type(title).__name__ == 'str':
+                w.write(title.lower() + "\n")
+                
+            if type(abstract).__name__ == 'str':
+                p = nlp(abstract)
+                
+                for s in p.sents:
+                    w.write(s.text.lower() + "\n")
+            
+
+convert_pubmed_to_ospl()
