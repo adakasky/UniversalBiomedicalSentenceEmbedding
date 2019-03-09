@@ -1,0 +1,123 @@
+%
+% File acl2019.tex
+%
+%% Based on the style files for ACL 2018, NAACL 2018/19, which were
+%% Based on the style files for ACL-2015, with some improvements
+%%  taken from the NAACL-2016 style
+%% Based on the style files for ACL-2014, which were, in turn,
+%% based on ACL-2013, ACL-2012, ACL-2011, ACL-2010, ACL-IJCNLP-2009,
+%% EACL-2009, IJCNLP-2008...
+%% Based on the style files for EACL 2006 by 
+%%e.agirre@ehu.es or Sergi.Balari@uab.es
+%% and that of ACL 08 by Joakim Nivre and Noah Smith
+
+\documentclass[11pt,a4paper]{article}
+\usepackage[hyperref]{acl2019}
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{url}
+
+\aclfinalcopy % Uncomment this line for the final submission
+%\def\aclpaperid{***} %  Enter the acl Paper ID here
+
+%\setlength\titlebox{5cm}
+% You can expand the titlebox if you need extra space
+% to show all the authors. Please do not make the titlebox
+% smaller than 5cm (the original size); we will check this
+% in the camera-ready version and ask you to change it back.
+
+\newcommand\BibTeX{B\textsc{ib}\TeX}
+\begin{document}
+\title{Universal Biomedical Sentence Embeddings}
+
+\author{Ao Liu \qquad Kushagra Pundeer \qquad Rohan Gangaraju \qquad Surya Teja \qquad Tu Vu\\
+  College of Information and Computer Science\\
+  University of Massachusetts Amherst\\
+  {\tt \{aoliu, kpundeer, rgangaraju, suryatejadev, tuvu\}@cs.umass.edu}
+  \AND
+  Ivana Williams\\
+  Chan Zuckberg Initiative\\
+  {\tt iwilliams@chanzuckerberg.com}}
+
+\date{}
+
+
+\maketitle
+
+
+\begin{abstract}
+  Pretrained word-level representations learned on large dataset help with the improvement on many NLP tasks. However, using only the word embeddings, models still have the burden to learn the sequence representations. The urge of developing pretrained sentence embeddings increases, especially in biomedical domain, due to their significance in many bio-NLP tasks, such as sentence similarity. Pretrained sentence embeddings allow models to leverage existing contextual knowledge and improve the performances even in a low resource setting. Our goal is to develop a universal biomedical sentence embedding model in order to facilitate researches in the biomedical domain. Due to the effectiveness of multi-task learning models in developing sentence embeddings for open-domain NLP as demonstrated in several works, such as GenSen \citep{subramanian2018learning} and Universal Sentence Encoder \citep{cer2018universal}, we plan to apply multitasking on biomedical datasets to build a universal sentence encoder model for biomedical domain, with the help of seq2seq models and language models.
+\end{abstract}
+
+\section{Introduction}
+Pretrained word embeddings have driven the success of many Natural Language Processing tasks. Transfer learning is applied on these tasks where the neural models use the pretrained word-level vector representations, which are obtained by unsupervised learning on a large corpus, as the input. It helps in low-resource settings where a large corpus is not available to learn the representations from scratch. While word embeddings can be helpful, models still need to learn relationship between words in context which can be challenging in a low-resource setting. Many recent works such as InferSent \citep{conneau2017supervised}, Skip-thought Vectors\cite{kiros2015skip} and Paragram-Phrase XXL \cite{wieting2015towards} have tried to address this issue by learning general purpose sentence representations and show their effectiveness in various NLP tasks. While most NLP techniques in general domain are applied to the biomedical domain, the success of these tasks does not transfer to the biomedical domain without considerable effort and modification \cite{DBLP:sciSpacy}. Even though there are multiple general purpose sentence embeddings trained on data in public domain, there is only one sentence level representation model for the Biomedical domain \cite{chen2018biosentvec}. In this project, we try to develop a universal sentence embedding model for the biomedical domain so that it can accelerate the progress of NLP tasks in biomedical text analysis.
+\iffalse
+One of the most critical areas of application of Natural Language processing has been in the field of biomedical literature. There is an exponential growth in the rate of publications in the medical and biomedical domain \cite{DBLP:journals/corr/BornmannM14} and there is considerable amount of work in the automation of extracting and processing information using various Natural Language Processing techniques. While most NLP techniques in general domain are applied to the biomedical domain, the success of these tasks does not transfer to the biomedical domain without considerable effort and modification \cite{DBLP:sciSpacy}.
+Word embeddings are common distributed vector representations which capture the syntactic and semantic properties of words in text. These are obtained by using unsupervised learning techniques on a large corpus of text. Using pretrained word embeddings allow NLP tasks to start with already existing information about individual words and apply transfer learning to tune this information for a specific task. Word embeddings have been prevalent in biomedical NLP tasks and are obtained by training on general domain textual resources and biomedical literature.
+Even with the use of word embeddings, NLP tasks still have to learn the representations for words in context. Hence many recent works like \cite{DBLP:journals/corr/ConneauKSBB17} have tried to build sentence embeddings which have shown strong transfer learning capabilities. The use of sentence embeddings can improve the performance of NLP tasks even in a low-resource setting.
+In this project, we try to develop universal sentence embedding for the biomedical domain so that it can accelerate the progress of NLP tasks in medical and biomedical text analysis.
+\fi
+
+\section{Methodology}
+The objective of this project is to apply multitasking on large biomedical corpus to learn a universal biomedical sentence embedding model. We will explore several models and tasks to find the reasonable ones that we can use to build up our own model. 
+
+To facilitate our approach, we want to train our model on a large corpus in biomedical domain in order to have good transferablity. PubMed consists of unlabeled biomedical articles from MEDLINE, life science journals and online books. We obtain a subset of over 5.9 million title-abstract pairs from the publications in the last 5 years. It is one of the largest biomedical dataset that is publicly available. Due to the source and the size of PubMed dataset, it is suitable for our purpose of training a general sentence encoder.
+
+The methodology of our project involves preprocessing, training sentence embeddings and evaluation on downstream tasks.
+
+\subsection{Preprocessing}
+Before we begin training the sentence embeddings, we apply the following preprocessing steps on the PUBMED dataset to clean the dataset and structure it for effective training of the sentence embeddings. We will apply basic preprocessing techniques like lowercasing, tokenization, etc. (using Spacy/AllenNLP). For BERT, we will follow preprocessing techniques similar to bioBERT \cite{lee2019biobert} to keep tokens compatible with the original BERT pretrained models. 
+
+\subsection{Training Sentence Embeddings} 
+The next step after preprocessing is to build and train biomedical sentence embeddings using the sentences from the PubMed dataset. We are presently experimenting with the following models.
+    
+\subsubsection{Seq2seq Multi-task Learning model}
+Seq2Seq approach proposed by \citet{britz2017massive} has become an effective way to deal with variable length input sequences to variable length output sequences. It directly models the conditional probability of mapping an input sequence of words to output sequence using an encoder-decoder framework. 
+    
+We intend to use Seq2Seq learning for multi-task learning instead of only focusing on only one task \cite{luong2015multi}. The 2 main tasks that we plan on starting with are auto-encoding \cite{DBLP:journals/corr/DaiL15a} and skip-thoughts \cite{DBLP:journals/corr/KirosZSZTUF15} prediction. Both of these tasks have shown to be more effective when combined in a multi-task learning model when compared to their results independently, as shown in the work by \citet{luong2015multi}. 
+    
+Auto-encoders are multi-layer neural network that copy inputs to outputs by first compressing inputs into latent space representation and then reconstructing the output from this representation. Skip-thoughts learns to encode input sentences into fixed dimensional vector representation and then reconstructs surrounding sentences to map sentences that share semantic and syntactic properties into similar vectors. Both these tasks generate an intermediate vector representation which can be used to represent a sentence.
+    
+We start with one-to-many seq2seq network which consists of one encoder and multiple decoders. A sequence of words is provided as the input and we use the same model to generate both the same sequence of words using one decoder and next sequence of words for skip-thoughts objective using another decoder.
+    
+We will train deep LSTM models using 4 layers with 1000-dimensional cells and embeddings on the PUBMED dataset. We will use mini-batch size of 128 and uniformly initialize the parameters in $[-0.06, 0.06]$. A dropout with probability of 0.2 will be applied over the vertical connections \cite{DBLP:journals/corr/PhamKL13}. We will make use of stochastic gradient descent (SGD) and reverse the input sequences. Finally we will employ a simple fine-tuning schedule where after every $x$ epochs we cut the learning rate by half for every $y$ epochs. The values of $x$ and $y$ also referred as finetuning start and finetuning cycle along with number of training epochs will vary from task to task and will be experimentally determined. 
+    
+\subsubsection{Bidirectional Encoder Representations from Transformers (BERT) \cite{devlin2018bert}}
+BERT is a language representation model that achieved state-of-the-art results on many NLP tasks, including tasks that use sentence embeddings, for open-domain NLP. However, the performance of language representation models depends heavily on the data on which the model is pretrained on, and the biomedical domain has a large corpus of words not found in open-domain corpus. Due to this problem, we plan to train sentence embeddings using BERT for the biomedical domain also. The BERT model consists of a multi-layered transformer network and bi-directional attention mechanism, and is pretrained by optimizing two objectives: masked language model and next sentence prediction. BERT uses a single or a pair of sentences as the input, and marks the start of each input using the token \texttt{[CLS]}. We can obtain the sentence embedding for a given sentence using BERT by passing it through the trained model and returning the final layer output of the \texttt{[CLS]} token used at the start of that sentence.
+    
+In this project, we intend to use two pretrained BERT models: one from the original work \cite{devlin2018bert} and the other from bioBERT (which is a fine tuned version of the original BERT model using Pubmed and PMC datasets) \cite{lee2019biobert}. Further, since our objective is to learn universal sentence embeddings, we intend to fine tune both the pretrained BERT models using multi-task learning with tasks like named entity recognition and fake sentence detection, using the available PubMed data.
+\iffalse
+the following methodology to learn feature representations. 
+\begin{itemize}
+    \item The BERT model is trained to optimize two objectives: masked language model and next sentence prediction.
+    \item For the first objective, a sentence is taken as the input and passed through a seq2seq encoder. 10\% of the words in the output are masked randomly and the corresponding loss is taken as one obective function. 
+    \item For the second objective, two sentences are taken as the input and passed through the same seq2seq encoder. The objective is to predict if the second sentence follows the first. 
+    \item This encoder consists of multiple layers of transformers 
+    \item  At the word level, BERT uses three kinds of embeddings: wordpiece embeddings, positional embeddings for the pair of sentences ((with support upto 512 tokens), and segment embeddings (one embedding each for the two sentences).
+\end{itemize}
+    
+uses a multi-layered transformer networks and bi-directional attention mechanism to learn 
+\fi
+
+\subsubsection{Fake Sentence Detection \cite{ranjan2018fake}}
+Now that we have auto-encoder-based Seq2Seq model and language model to help building our own model, we also want to see if there are other models or tasks that can facilitate the learning of sentence embeddings. InferSent \cite{conneau2017supervised} proposed that natural language inference (NLI) task can help build good sentence embeddings. Recent researches \cite{subramanian2018learning, cer2018universal} adopt their idea and significantly improve the quality of sentence embeddings with multitasking. However, there is no competitive replacement of the SNLI dataset \cite{bowman2015large} they used in their papers in the biomedical domain; that is, no NLI dataset exists for biomedical domain. Thus, we have to find an appropriate alternative. The fake sentence detection task first generates fake sentences by shuffling or dropping words in the original sentences and then builds a classifier to predict whether the input is a fake sentence or not. The reason we think it could be a suitable task is that it allows our model to learn more syntactic and semantic information than that are need for sentence embeddings.
+
+\section{Evaluation}
+The final step of our methodology is to evaluate the trained models on downstream biomedical NLP tasks. Since semantic sentence similarity task is one of the most vital tasks in the biomedical domain, and has applications in tasks like duplicate sentence identification in diagnosis reports, identifying cohorts among patients based on extent of similarity in scan reports, diagnosis, etc. The first downstream task we are considering is the semantic sentence similarity task using BIOSSES dataset. BIOSSES contains 100 sentence pairs selected from TAC2 Biomedical Summarization Track Training Data Set. Five human experts score the similarity of sentence pairs in the range $[0, 4]$ following SemEval 2012 Task 6 Guideline. The mean of the scores assigned by the 5 experts is taken as the gold standard. We use the Pearson coefficient (which indicates the extent to which two variables are linearly related) to evaluate the cosine similarity scores obtained by our model with the gold standard normalized to $[0, 1]$.
+
+Further, we plan to evaluate our sentence embeddings on probing tasks proposed by \citet{conneau2018you}. The probing tasks tend to evaluate sentence embeddings based on their capabilities of predicting following information with a simple output layer:
+\begin{enumerate}
+    \item surface informations: the length of the sentence and the information of the original words
+    \item syntactic information: word orders and hierarchical structures
+    \item semantic information: tense and the number of subjects or objects, etc.
+\end{enumerate}
+We will evaluate our model based on the accuracies for these probing tasks.
+
+\bibliography{acl2019}
+\bibliographystyle{acl_natbib}
+
+
+
+\end{document}
